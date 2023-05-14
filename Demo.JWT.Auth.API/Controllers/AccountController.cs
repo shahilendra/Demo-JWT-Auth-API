@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -19,7 +20,12 @@ namespace Demo.JWT.Auth.API.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            return new string[] { "Shailendra Tiwari", "Bhoopendra Tiwari" };
+            var email = string.Empty;
+            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            {
+                email = identity.FindFirst(ClaimTypes.Name).Value;
+            }
+            return new string[] { "Shailendra Tiwari", "Bhoopendra Tiwari", email };
         }
 
         [AllowAnonymous]
